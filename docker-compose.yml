@@ -1,0 +1,20 @@
+version: "3.1"
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certs:/etc/nginx/certs:ro
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./conf/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf
+    restart: unless-stopped
+
+
+# echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
+# docker network create nginx-proxy
+networks:
+  default:
+    external:
+      name: nginx-proxy
