@@ -3,6 +3,7 @@ services:
   nginx-proxy:
     image: nginxproxy/nginx-proxy:alpine
     container_name: nginx-proxy
+    network_mode: bridge
     ports:
       - "80:80"
       - "443:443"
@@ -17,6 +18,7 @@ services:
   letsencrypt:
     image: nginxproxy/acme-companion
     restart: always
+    network_mode: bridge
     volumes_from:
       - nginx-proxy:rw
     volumes:
@@ -29,11 +31,5 @@ services:
     environment:
       - DEFAULT_EMAIL=amarcello@crackthecode.la
 
-# echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
-# docker network create nginx-proxy
-networks:
-  default:
-    external:
-      name: nginx-proxy
 volumes:
   acme:
