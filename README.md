@@ -1,3 +1,3 @@
 ```
-docker-compose -f letsencrypt.yml -f docker-compose.yml
+docker-compose -f docker-compose.yml
 ```
