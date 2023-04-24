@@ -29,7 +29,7 @@ services:
       - ./vhost:/etc/nginx/vhost.d
       - acme:/etc/acme.sh
     environment:
-      - DEFAULT_EMAIL=amarcello@crackthecode.la
+      - DEFAULT_EMAIL=tecnologia@crackthecode.la
 
 volumes:
   acme:
