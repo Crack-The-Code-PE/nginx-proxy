@@ -13,6 +13,7 @@ services:
       - ./conf/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf
       - ./vhost:/etc/nginx/vhost.d
       - ./html:/usr/share/nginx/html
+      - ./nginx.tmpl:/app/nginx.tmpl
     restart: unless-stopped
 
   letsencrypt:
