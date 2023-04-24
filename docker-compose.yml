@@ -1,7 +1,9 @@
 version: "3.1"
 services:
   nginx-proxy:
-    image: jwilder/nginx-proxy
+    image: nginxproxy/nginx-proxy:alpine
+    container_name: nginx-proxy
+    network_mode: bridge
     ports:
       - "80:80"
       - "443:443"
@@ -9,12 +11,26 @@ services:
       - ./certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - ./conf/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf
+      - ./vhost:/etc/nginx/vhost.d
+      - ./html:/usr/share/nginx/html
+      - ./nginx.tmpl:/app/nginx.tmpl
     restart: unless-stopped
 
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    restart: always
+    network_mode: bridge
+    volumes_from:
+      - nginx-proxy:rw
+    volumes:
+      - ./certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./conf/client_max_body_size.conf:/etc/nginx/conf.d/client_max_body_size.conf
+      - ./html:/usr/share/nginx/html
+      - ./vhost:/etc/nginx/vhost.d
+      - acme:/etc/acme.sh
+    environment:
+      - DEFAULT_EMAIL=tecnologia@crackthecode.la
 
-# echo "127.0.0.1 $DOMAIN" | sudo tee -a /etc/hosts
-# docker network create nginx-proxy
-networks:
-  default:
-    external:
-      name: nginx-proxy
+volumes:
+  acme:
