@@ -181,7 +181,7 @@
         {{- $keepalive := first (keys (groupByLabel .Containers "com.github.nginx-proxy.nginx-proxy.keepalive")) }}
     
     location /metrics {
-        allow 172.17.0.0/16;
+        allow 172.17.0.0/12;
         deny all;
         proxy_pass {{ trim .Proto }}://{{ trim .Upstream }}{{ trim .Dest }};
     }
